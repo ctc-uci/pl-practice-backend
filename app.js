@@ -1,17 +1,22 @@
 const express = require('express');
 const cors = require('cors');
 
-require('dotenv').config();
+const db = require('./server/db');
 
 const app = express();
 
-const PORT = process.env.PORT || 3001;
+const menuItemRouter = require('./routes/menuItem');
+
+const PORT = 3001;
 
 app.use(
   cors({
-    origin: `${process.env.REACT_APP_HOST}:${process.env.REACT_APP_PORT}`,
+    origin: `http://localhost:3000`,
   }),
 );
+
+app.use(express.json());
+app.use('/menuItem', menuItemRouter);
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
