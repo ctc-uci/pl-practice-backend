@@ -14,6 +14,24 @@ menuItemRouter.get('/', async (req, res) => {
   }
 });
 
+// GET by type
+menuItemRouter.get('/:type', async (req, res) => {
+  try {
+    const result = await db.query(`SELECT * FROM public."MenuItem" WHERE TYPE=$1;`, [
+      req.params.type,
+    ]);
+    res.status(200).json({
+      status: 'Success',
+      data: result.rows,
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'Failed',
+      err,
+    });
+  }
+});
+
 // GET menu item by id
 menuItemRouter.get('/:id', async (req, res) => {
   try {
@@ -33,18 +51,18 @@ menuItemRouter.post('/add-menu-item', async (req, res) => {
     tags,
     type,
     calories,
-    total_fat,
-    saturated_fat,
+    total_fat: totalFat,
+    saturated_fat: saturatedFat,
     sodium,
-    carbs,
-    fiber,
+    total_carbs: totalCarbs,
+    dietary_fiber: dietaryFiber,
     sugar,
-    protien,
+    protein,
   } = req.body;
   try {
-    const newMenuItem = await db.query(
+    await db.query(
       `
-            INSERT INTO public."MenuItem" (name, description, tags, type, calories, total_fat, saturated_fat, sodium, carbs, fiber, sugar, protien)
+            INSERT INTO public."MenuItem" (name, description, tags, type, calories, total_fat, saturated_fat, sodium, carbs, fiber, sugar, protein)
             VALUES
             ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12);`,
       [
@@ -53,13 +71,13 @@ menuItemRouter.post('/add-menu-item', async (req, res) => {
         tags,
         type,
         calories,
-        total_fat,
-        saturated_fat,
+        totalFat,
+        saturatedFat,
         sodium,
-        carbs,
-        fiber,
+        totalCarbs,
+        dietaryFiber,
         sugar,
-        protien,
+        protein,
       ],
     );
     res.status(201).json({
@@ -83,13 +101,13 @@ menuItemRouter.put('/:id', async (req, res) => {
       tags,
       type,
       calories,
-      total_fat,
-      saturated_fat,
+      total_fat: totalFat,
+      saturated_fat: saturatedFat,
       sodium,
       carbs,
       fiber,
       sugar,
-      protien,
+      protein,
     } = req.body;
 
     const updatedMenuItem = await db.query(
@@ -105,7 +123,7 @@ menuItemRouter.put('/:id', async (req, res) => {
             carbs = $9,
             fiber = $10,
             sugar = $11,
-            protien = $12
+            protein = $12
             WHERE id = $13
             RETURNING *;`,
       [
@@ -114,13 +132,13 @@ menuItemRouter.put('/:id', async (req, res) => {
         tags,
         type,
         calories,
-        total_fat,
-        saturated_fat,
+        totalFat,
+        saturatedFat,
         sodium,
         carbs,
         fiber,
         sugar,
-        protien,
+        protein,
         id,
       ],
     );
