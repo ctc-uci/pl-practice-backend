@@ -10,9 +10,4 @@ const pool = new Pool({
   database: 'postgres',
 });
 
-// const cn = `postgres://${process.env.AWS_USER}:${encodeURIComponent(process.env.AWS_PASSWORD)}@${
-//   process.env.AWS_HOST
-// }:${process.env.AWS_PORT}/${process.env.AWS_DB_NAME}`; // For pgp
-// const db = pgp(cn);
-
 module.exports = { query: (text, params) => pool.query(text, params) };
