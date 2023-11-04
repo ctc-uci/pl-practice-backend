@@ -1,5 +1,4 @@
 const { Pool } = require('pg');
-// const pgp = require('pg-promise')({});
 require('dotenv').config();
 
 const pool = new Pool({
