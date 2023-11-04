@@ -1,5 +1,4 @@
 const { Pool } = require('pg');
-require('dotenv').config();
 
 const pool = new Pool({
   host: 'ctc-practice.cfnjxhawdzer.us-west-2.rds.amazonaws.com',
